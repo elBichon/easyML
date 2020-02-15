@@ -50,6 +50,7 @@ if __name__ == "__main__":
 	StandardScaler(copy=True, with_mean=True, with_std=True)
 
 	df = utils.read_dataset(path,separator)
+	df = df[['Survived', 'Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare']]
 	utils.broad_analysis(df)
 	utils.missing_values_table(df)
 	features_list = df.columns
@@ -60,6 +61,19 @@ if __name__ == "__main__":
 	utils.visualise_correlation(df)
 	df = utils.one_hot_encoder(df)
 	df = utils.missing_values(df,'drop')
+	features = df.columns.tolist()
+	del features[features.index(str(target))]
+
+	for feature in features:
+		if df[feature].dtypes == 'float64':
+			if df[feature].skew() == 0:
+				pass
+			else:
+				print(df.columns)
+				df[feature] = df[feature].apply(utils.convert_to_log,args=[min(df[feature].values.tolist())])
+	print('=======================')
+	print(df.head())
+	print('=======================')
 	features_to_keep = utils.remove_colinar_features(target,local_threshold,df)
 	label = df[target]
 	df = df[features_to_keep]
@@ -74,9 +88,10 @@ if __name__ == "__main__":
 	principalDf1 = pd.DataFrame(data = principalComponents, columns = list_features)
 	df = utils.create_optimal_dataset(list_features,principalDf1,label)
 	X_train, X_test, y_train, y_test = train_test_split(df[list_features], df.label,train_size=0.9, test_size=0.1)
+
 	if model == 'regression':
 		pipeline_optimizer = TPOTRegressor()
-		pipeline_optimizer = TPOTRegressor(generations=3, population_size=20, cv=5,random_state=42, verbosity=2)
+		pipeline_optimizer = TPOTRegressor(generations=10, population_size=20, cv=5,random_state=42, verbosity=2)
 	elif model == 'classification':
 		pipeline_optimizer = TPOTClassifier()
 		pipeline_optimizer = TPOTClassifier(generations=10, population_size=20, cv=5,random_state=42, verbosity=2)
@@ -85,4 +100,5 @@ if __name__ == "__main__":
 	pipeline_optimizer.export('tpot_exported_pipeline.py')
 
 
-
+    #for col in df:
+    #    if df[col].dtype == 'object':
