@@ -64,12 +64,12 @@ if __name__ == "__main__":
 	#removing proper nouns from the dataset
 	name_features = utils.remove_name(nlp,df)
 	df = df.drop(name_features,axis=1)
-	#visualizing correlation matrix (linear correlation only
-	utils.visualise_correlation(df)
 	#one hot encoding of categorical data
 	df = utils.one_hot_encoder(df)
 	#processing of NaNs values
 	df = utils.missing_values(df,'drop')
+	#visualizing correlation matrix (linear correlation only
+	utils.visualise_correlation(df)
 	features = df.columns.tolist()
 	del features[features.index(str(target))]
 	#converting float values to log(min(x)+1) if the distribution is skewed 
@@ -87,7 +87,7 @@ if __name__ == "__main__":
 	features_to_keep = utils.remove_colinar_features(target,local_threshold,df)
 	label = df[target]
 	df = df[features_to_keep]
-	#APPLY PCA to the remaining features for noise removal and better discrimination
+	#apply PCA to the remaining features for noise removal and better discrimination
 	nb_components = utils.PCA_generator(df,threshold)
 	utils.pca_components(df, nb_components)
 	scaler.fit(df)
