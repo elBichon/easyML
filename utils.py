@@ -418,7 +418,6 @@ def remove_colinar_features(target,local_threshold,df):
 
 def PCA_generator(df,threshold):
     i = 0
-    j = 0
     size = len(df.columns)
     X = df.values
     X_std = StandardScaler().fit_transform(X)
