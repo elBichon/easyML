@@ -1,1 +1,1 @@
-pycaret == 2
+pycaret == 2.3
