@@ -7,5 +7,5 @@ RUN pip install opencv-python
 RUN pip install PyPI
 RUN pip install pyinstaller
 RUN pip install bottleneck
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip install requirements.txt
 CMD ["/app/app.py"]
