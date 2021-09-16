@@ -2,6 +2,9 @@ FROM python:3.7-slim
 WORKDIR /app
 ADD . /app
 RUN apt-get update && apt-get install -y libgomp1
-RUN pip install -r requirements.txt
+COPY requirements.txt /tmp/
+RUN pip install --requirement /tmp/requirements.txt
+COPY . /tmp/
+
 ENTRYPOINT ["python"]
 CMD ["/app/app.py"]
