@@ -1,7 +1,6 @@
-FROM python:3.7-alpine
+FROM python:3.7-slim
 WORKDIR /app
 ADD . /app
 RUN apt-get update && apt-get install -y libgomp1
-RUN apt-get install gcc
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip install pycaret
 CMD ["/app/app.py"]
